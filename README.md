@@ -46,6 +46,14 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 `npm install @material-ui/core`
 
+### PoseNet
+
+`npm install @tensorflow-models/posenet`
+
+`npm install @tensorflow/tfjs-converter`
+
+`npm install @tensorflow/tfjs-core`
+
 ### [Code Formatting](https://blog.echobind.com/integrating-prettier-eslint-airbnb-style-guide-in-vscode-47f07b5d7d6a)
 
 `npm install -D eslint prettier`
