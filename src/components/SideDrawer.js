@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const SideDrawer = () => {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    isSideDrawerOpen: false,
+    left: false,
   });
 
   const toggleDrawer = (anchor, open) => (event) => {

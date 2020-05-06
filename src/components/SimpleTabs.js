@@ -6,7 +6,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import SwipeableViews from "react-swipeable-views";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -20,8 +19,8 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
+        <Box p={10}>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -56,18 +55,14 @@ const SimpleTabs = (props) => {
     setValue(newValue);
   };
 
-  const handleChangeIndex = (newValue) => {
-    setValue(newValue);
-  };
-
   const toTabLabel = (i, children) => {
     const label = `${i + 1}`;
-    return <Tab label={label} {...a11yProps(i)} />;
+    return <Tab key={i} label={label} {...a11yProps(i)} />;
   };
 
   const toTabPanel = (value, i, children) => {
     return (
-      <TabPanel value={value} index={i}>
+      <TabPanel key={i} value={value} index={i}>
         {children}
       </TabPanel>
     );
@@ -85,13 +80,7 @@ const SimpleTabs = (props) => {
         >
           {props.children.map((c, i) => toTabLabel(i, c))}
         </Tabs>
-        <SwipeableViews
-          index={value}
-          onChangeIndex={handleChangeIndex}
-          enableMouseEvents
-        >
-          {props.children.map((c, i) => toTabPanel(value, i, c))}
-        </SwipeableViews>
+        {props.children.map((c, i) => toTabPanel(value, i, c))}
       </Paper>
     </div>
   );
