@@ -3,6 +3,7 @@ import "./App.css";
 import Header from "./components/Header";
 import SimpleTabs from "./components/SimpleTabs";
 import SideDrawer from "./components/SideDrawer";
+import PoseClassifier from "./components/PoseClassifier";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
         <SideDrawer />
       </Header>
       <SimpleTabs>
-        <div>Tab Panel 1</div>
+        <PoseClassifier />
         <div>Tab Panel 2</div>
         <div>Tab Panel 3</div>
       </SimpleTabs>
