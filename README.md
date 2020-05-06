@@ -48,6 +48,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### PoseNet
 
+`npm install @tensorflow/tfjs`
+
 `npm install @tensorflow-models/posenet`
 
 `npm install @tensorflow/tfjs-converter`
