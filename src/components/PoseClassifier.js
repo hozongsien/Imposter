@@ -1,13 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import * as posenet from '@tensorflow-models/posenet';
-import loadVideo from './loadVideo';
+import loadMedia from './loadMedia';
 import loadModel from './loadModel';
 import detectPose from './detectPose';
 import '../styles/camera.css';
 
 const estimatePose = async (videoRef, canvasRef) => {
-  Promise.all([loadModel(posenet), loadVideo(videoRef)]).then((values) =>
-    detectPose(values[0], values[1], canvasRef.current)
+  Promise.all([loadModel(posenet, true), loadMedia(videoRef, true)]).then((values) =>
+    detectPose(values[0], values[1], canvasRef.current, true)
   );
 };
 

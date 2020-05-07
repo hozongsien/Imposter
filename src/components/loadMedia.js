@@ -1,8 +1,10 @@
+/* eslint-disable no-param-reassign */
+/* global navigator */
 const loadCamera = async (videoRef) => {
   const isMobile = true;
 
-  let videoConstraints = {
-    facingMode: "user",
+  const videoConstraints = {
+    facingMode: 'user',
     width: isMobile ? undefined : videoRef.videoWidth,
     height: isMobile ? undefined : videoRef.videoHeight,
     aspectRatio: { ideal: 0.5625 },
@@ -14,7 +16,6 @@ const loadCamera = async (videoRef) => {
   };
 
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
-  console.log(videoRef);
   videoRef.current.srcObject = stream;
 
   return new Promise((resolve) => {
@@ -25,10 +26,22 @@ const loadCamera = async (videoRef) => {
 };
 
 const loadVideo = async (videoRef) => {
-  const video = await loadCamera(videoRef);
-  video.play();
-
-  return video;
+  return new Promise((resolve) => {
+    videoRef.current.onloadeddata = () => {
+      resolve(videoRef.current);
+    };
+  });
 };
 
-export default loadVideo;
+const loadMedia = async (videoRef, isCamera) => {
+  let media;
+  if (isCamera) {
+    media = await loadCamera(videoRef);
+    return media;
+  }
+
+  media = await loadVideo(videoRef);
+  return media;
+};
+
+export default loadMedia;

@@ -1,7 +1,7 @@
+/* global requestAnimationFrame */
 import { drawSkeleton, drawKeypoints, drawBoundingBox } from './renderPredictions';
 
-const detectPose = (net, video, canvas) => {
-  const ctx = canvas.getContext('2d');
+const detectPose = (net, video, canvas, drawPrediction) => {
   const videoWidth = video.width;
   const videoHeight = video.height;
 
@@ -22,22 +22,28 @@ const detectPose = (net, video, canvas) => {
     });
     poses = poses.concat(pose);
 
-    ctx.clearRect(0, 0, videoWidth, videoHeight);
-
-    ctx.save();
-    ctx.scale(-1, 1);
-    ctx.translate(-videoWidth, 0);
-    ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-    ctx.restore();
+    const ctx = canvas.getContext('2d');
+    if (drawPrediction) {
+      ctx.clearRect(0, 0, videoWidth, videoHeight);
+      ctx.save();
+      ctx.scale(-1, 1);
+      ctx.translate(-videoWidth, 0);
+      ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+      ctx.restore();
+    }
 
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence
     // scores
     poses.forEach(({ score, keypoints }) => {
       if (score >= minPoseConfidence) {
-        drawKeypoints(keypoints, minPartConfidence, ctx);
-        drawSkeleton(keypoints, minPartConfidence, ctx);
-        // drawBoundingBox(keypoints, ctx);
+        if (drawPrediction) {
+          drawKeypoints(keypoints, minPartConfidence, ctx);
+          drawSkeleton(keypoints, minPartConfidence, ctx);
+          // drawBoundingBox(keypoints, ctx);
+        } else {
+          console.log(keypoints);
+        }
       }
     });
 
