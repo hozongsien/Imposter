@@ -21,8 +21,8 @@ const PoseClassifier = () => {
 
   return (
     <div className="window">
-      <video className="video" autoPlay playsInline muted ref={videoRef} height="250" width="150" />
-      <canvas className="canvas" ref={canvasRef} height="250" width="150" />
+      <video className="video" autoPlay playsInline muted ref={videoRef} height="500" width="400" />
+      <canvas className="canvas" ref={canvasRef} />
     </div>
   );
 };

@@ -21,8 +21,10 @@ const TabPanel = (props) => {
       {...other}
     >
       {value === index && (
-        <Box p={10}>
-          <Typography component="div">{children}</Typography>
+        <Box p={0}>
+          <Typography component="div" align="center">
+            {children}
+          </Typography>
         </Box>
       )}
     </div>
@@ -73,6 +75,7 @@ const SimpleTabs = (props) => {
       </TabPanel>
     );
   };
+
   return (
     <div className={classes.root}>
       <Paper>
