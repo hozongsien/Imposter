@@ -11,9 +11,9 @@ const loadModel = async (model, isMobile) => {
   } else {
     net = await model.load({
       architecture: 'ResNet50',
-      outputStride: 16,
+      outputStride: 32,
       inputResolution: { width: 257, height: 200 },
-      quantBytes: 4,
+      quantBytes: 2,
     });
   }
 

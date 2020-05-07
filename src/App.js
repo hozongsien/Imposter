@@ -3,7 +3,7 @@ import './App.css';
 import Header from './components/Header';
 import SimpleTabs from './components/SimpleTabs';
 import SideDrawer from './components/SideDrawer';
-import PoseClassifier from './components/PoseClassifier';
+import PoseClassifierTab from './components/PoseClassifierTab';
 import LearnTab from './components/LearnTab';
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
         <SideDrawer />
       </Header>
       <SimpleTabs>
-        <PoseClassifier />
+        <PoseClassifierTab />
         <LearnTab />
         <div>Tab Panel 3</div>
       </SimpleTabs>

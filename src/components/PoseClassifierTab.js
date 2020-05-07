@@ -6,12 +6,12 @@ import detectPose from './detectPose';
 import '../styles/camera.css';
 
 const estimatePose = async (videoRef, canvasRef) => {
-  Promise.all([loadModel(posenet, true), loadMedia(videoRef, true)]).then((values) =>
+  Promise.all([loadModel(posenet, false), loadMedia(videoRef, true)]).then((values) =>
     detectPose(values[0], values[1], canvasRef.current, true)
   );
 };
 
-const PoseClassifier = () => {
+const PoseClassifierTab = () => {
   const videoRef = useRef();
   const canvasRef = useRef();
 
@@ -27,4 +27,4 @@ const PoseClassifier = () => {
   );
 };
 
-export default PoseClassifier;
+export default PoseClassifierTab;
