@@ -1,13 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/jsx-props-no-spreading */
+import React from 'react';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
-function TabPanel(props) {
+const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -25,7 +27,7 @@ function TabPanel(props) {
       )}
     </div>
   );
-}
+};
 
 TabPanel.propTypes = {
   children: PropTypes.node,
@@ -33,12 +35,16 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
+TabPanel.defaultProps = {
+  children: PropTypes.node,
+};
+
+const a11yProps = (index) => {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,9 +66,9 @@ const SimpleTabs = (props) => {
     return <Tab key={i} label={label} {...a11yProps(i)} />;
   };
 
-  const toTabPanel = (value, i, children) => {
+  const toTabPanel = (val, i, children) => {
     return (
-      <TabPanel key={i} value={value} index={i}>
+      <TabPanel key={i} value={val} index={i}>
         {children}
       </TabPanel>
     );
@@ -84,6 +90,14 @@ const SimpleTabs = (props) => {
       </Paper>
     </div>
   );
+};
+
+SimpleTabs.propTypes = {
+  children: PropTypes.node,
+};
+
+SimpleTabs.defaultProps = {
+  children: PropTypes.node,
 };
 
 export default SimpleTabs;

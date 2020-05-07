@@ -1,9 +1,9 @@
-import React from "react";
-import "./App.css";
-import Header from "./components/Header";
-import SimpleTabs from "./components/SimpleTabs";
-import SideDrawer from "./components/SideDrawer";
-import PoseClassifier from "./components/PoseClassifier";
+import React from 'react';
+import './App.css';
+import Header from './components/Header';
+import SimpleTabs from './components/SimpleTabs';
+import SideDrawer from './components/SideDrawer';
+import PoseClassifier from './components/PoseClassifier';
 
 function App() {
   return (
