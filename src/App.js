@@ -1,10 +1,10 @@
 import React from 'react';
-import './App.css';
 import Header from './components/Header';
 import SimpleTabs from './components/SimpleTabs';
 import SideDrawer from './components/SideDrawer';
 import PoseClassifierTab from './components/PoseClassifierTab';
 import LearnTab from './components/LearnTab';
+import './App.css';
 
 function App() {
   return (

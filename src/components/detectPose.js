@@ -1,21 +1,18 @@
 /* global requestAnimationFrame */
 import renderPredictions from './renderPredictions';
 
-const detectPose = (net, video, canvas, drawPrediction) => {
-  async function poseDetectionFrame() {
+const detectPose = (net, video, canvas, drawPrediction, shouldDetect) => {
+  const poseDetectionFrame = async () => {
     let poses = [];
-
     const pose = await net.estimatePoses(video, {
       flipHorizontal: true,
       decodingMethod: 'single-person',
     });
     poses = poses.concat(pose);
 
-    if (drawPrediction) {
-      renderPredictions(poses, video, canvas);
-      requestAnimationFrame(poseDetectionFrame);
-    }
-  }
+    renderPredictions(poses, video, canvas);
+    requestAnimationFrame(poseDetectionFrame);
+  };
 
   poseDetectionFrame();
 };
