@@ -9,7 +9,6 @@ const PoseClassifierTab = (props) => {
   const { shouldDetect } = props;
   const videoRef = useRef();
   const canvasRef = useRef();
-  const [requestId, setRequestId] = useState(0);
 
   const predict = async (videoRef, canvasRef) => {
     Promise.all([loadModel(posenet, 'medium'), loadMedia(videoRef, true)]).then((values) =>
@@ -29,9 +28,8 @@ const PoseClassifierTab = (props) => {
   useEffect(() => {
     if (shouldDetect) {
       const id = startPredictions();
-      setRequestId(id);
     } else {
-      stopPredictions(requestId);
+      stopPredictions();
     }
   }, [videoRef, canvasRef, shouldDetect]);
 

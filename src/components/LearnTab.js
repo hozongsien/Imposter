@@ -6,7 +6,7 @@ import loadMedia from './loadMedia';
 import detectPose from './detectPose';
 import '../styles/camera.css';
 
-const estimatePose = async (videoRef, canvasRef) => {
+const predict = async (videoRef, canvasRef) => {
   Promise.all([loadModel(posenet, 'low'), loadMedia(videoRef, false)]).then((values) => {
     const [model, video] = values;
     video.play();
@@ -19,12 +19,12 @@ const LearnTab = () => {
   const canvasRef = useRef();
 
   useEffect(() => {
-    estimatePose(videoRef, canvasRef);
+    predict(videoRef, canvasRef);
   }, [videoRef, canvasRef]);
 
   return (
     <div className="window">
-      <video controls src="/videos/renegade.mp4" muted ref={videoRef} height="500" width="400" />
+      <video controls src="/videos/renegade.mp4" muted ref={videoRef} height="400" width="300" />
       <canvas className="canvas" ref={canvasRef} style={{ display: 'none' }} />
     </div>
   );

@@ -28,7 +28,7 @@ const TabPanel = (props) => {
       aria-labelledby={`action-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && <Box p={0}>{children}</Box>}
     </Typography>
   );
 };
@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: green[500],
     '&:hover': {
       backgroundColor: green[600],
+    },
+    panel: {
+      padding: '0px',
     },
   },
 }));
@@ -141,10 +144,10 @@ const SimpleTabs = (props) => {
           {React.cloneElement(props.children[0], { shouldDetect })}
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          ITEM 2
+          {props.children[1]}
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
-          ITEM 3
+          {props.children[2]}
         </TabPanel>
       </Paper>
       {fabs.map((fab, index) => (
