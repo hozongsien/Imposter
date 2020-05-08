@@ -7,7 +7,7 @@ import detectPose from './detectPose';
 import '../styles/camera.css';
 
 const estimatePose = async (videoRef, canvasRef) => {
-  Promise.all([loadModel(posenet, true), loadMedia(videoRef, false)]).then((values) => {
+  Promise.all([loadModel(posenet, 'low'), loadMedia(videoRef, false)]).then((values) => {
     const [model, video] = values;
     video.play();
     detectPose(model, video, canvasRef.current, false);
@@ -20,7 +20,7 @@ const LearnTab = () => {
 
   useEffect(() => {
     estimatePose(videoRef, canvasRef);
-  }, [videoRef]);
+  }, [videoRef, canvasRef]);
 
   return (
     <div className="window">
