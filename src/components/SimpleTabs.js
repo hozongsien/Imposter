@@ -10,8 +10,9 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Zoom from '@material-ui/core/Zoom';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
+import PauseIcon from '@material-ui/icons/Pause';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { green } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
@@ -95,22 +96,22 @@ const SimpleTabs = (props) => {
 
   const fabs = [
     {
-      color: 'primary',
-      className: classes.fab,
-      icon: <AddIcon />,
-      label: 'Add',
-    },
-    {
-      color: 'secondary',
-      className: classes.fab,
-      icon: <EditIcon />,
-      label: 'Edit',
-    },
-    {
       color: 'inherit',
       className: clsx(classes.fab, classes.fabGreen),
       icon: <UpIcon />,
       label: 'Expand',
+    },
+    {
+      color: 'secondary',
+      className: classes.fab,
+      icon: <CloudUploadIcon />,
+      label: 'Edit',
+    },
+    {
+      color: 'primary',
+      className: classes.fab,
+      icon: shouldDetect ? <PauseIcon /> : <PlayArrowIcon />,
+      label: 'Pause/Play',
     },
   ];
 
@@ -141,13 +142,13 @@ const SimpleTabs = (props) => {
           {props.children.map((c, i) => toTabLabel(i, c))}
         </Tabs>
         <TabPanel value={value} index={0} dir={theme.direction}>
-          {React.cloneElement(props.children[0], { shouldDetect })}
+          {props.children[0]}
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           {props.children[1]}
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
-          {props.children[2]}
+          {React.cloneElement(props.children[2], { shouldDetect })}
         </TabPanel>
       </Paper>
       {fabs.map((fab, index) => (

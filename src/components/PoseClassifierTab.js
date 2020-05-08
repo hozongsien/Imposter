@@ -31,7 +31,7 @@ const PoseClassifierTab = (props) => {
     } else {
       stopPredictions();
     }
-  }, [videoRef, canvasRef, shouldDetect]);
+  }, [videoRef, canvasRef]);
 
   return (
     <div className="window">

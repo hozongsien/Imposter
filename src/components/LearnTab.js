@@ -24,8 +24,8 @@ const LearnTab = () => {
 
   return (
     <div className="window">
-      <video controls src="/videos/renegade.mp4" muted ref={videoRef} height="400" width="300" />
-      <canvas className="canvas" ref={canvasRef} style={{ display: 'none' }} />
+      <video src="/videos/renegade.mp4" muted ref={videoRef} height="400" width="300" />
+      <canvas className="canvas" ref={canvasRef} style={{ display: 'block' }} />
     </div>
   );
 };

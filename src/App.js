@@ -13,9 +13,9 @@ function App() {
         <SideDrawer />
       </Header>
       <SimpleTabs>
-        <PoseClassifierTab />
+        <div>Tab Panel 1</div>
         <LearnTab />
-        <div>Tab Panel 3</div>
+        <PoseClassifierTab />
       </SimpleTabs>
     </div>
   );
