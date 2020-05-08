@@ -68,9 +68,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: green[600],
     },
-    panel: {
-      padding: '0px',
-    },
   },
 }));
 
@@ -99,13 +96,13 @@ const SimpleTabs = (props) => {
       color: 'inherit',
       className: clsx(classes.fab, classes.fabGreen),
       icon: <UpIcon />,
-      label: 'Expand',
+      label: 'Up',
     },
     {
       color: 'secondary',
       className: classes.fab,
       icon: <CloudUploadIcon />,
-      label: 'Edit',
+      label: 'Upload',
     },
     {
       color: 'primary',
