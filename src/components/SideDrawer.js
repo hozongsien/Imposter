@@ -17,7 +17,7 @@ import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = makeStyles((theme) => ({
   list: {
-    width: 250,
+    width: 300,
   },
   menuButton: {
     marginRight: theme.spacing(2),
