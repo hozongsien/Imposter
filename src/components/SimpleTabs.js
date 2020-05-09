@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -13,7 +12,6 @@ import Fab from '@material-ui/core/Fab';
 import PauseIcon from '@material-ui/icons/Pause';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { green } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 
@@ -81,9 +79,13 @@ const SimpleTabs = (props) => {
     setValue(newValue);
   };
 
-  const handleToggleDetection = () => {
+  const handleClickToUpload = () => {
+    // console.log('Upload file');
+  };
+
+  const handleClickToToggleDetection = () => {
+    // console.log(`Prediction: ${!shouldDetect}`);
     setShouldDetect(!shouldDetect);
-    // console.log(shouldDetect);
   };
 
   const transitionDuration = {
@@ -93,34 +95,31 @@ const SimpleTabs = (props) => {
 
   const fabs = [
     {
-      color: 'inherit',
-      className: clsx(classes.fab, classes.fabGreen),
-      icon: <UpIcon />,
-      label: 'Up',
-    },
-    {
       color: 'secondary',
       className: classes.fab,
       icon: <CloudUploadIcon />,
       label: 'Upload',
+      onClickHandler: handleClickToUpload,
     },
     {
       color: 'primary',
       className: classes.fab,
       icon: shouldDetect ? <PauseIcon /> : <PlayArrowIcon />,
       label: 'Pause/Play',
+      onClickHandler: handleClickToToggleDetection,
     },
   ];
 
-  const toTabLabel = (i, child) => {
+  const toTabLabel = (c, i) => {
     const label = `${i + 1}`;
     return <Tab key={i} label={label} {...a11yProps(i)} />;
   };
 
-  const toTabPanel = (val, i, child) => {
+  const toTabPanel = (c, i, v, a) => {
+    // Last item to be cloned to handle stopping of predictions
     return (
-      <TabPanel key={i} value={val} index={i} dir={theme.direction}>
-        {child}
+      <TabPanel key={i} index={i} value={v} dir={theme.direction}>
+        {i === a.length - 1 ? React.cloneElement(c, { shouldDetect }) : c}
       </TabPanel>
     );
   };
@@ -129,6 +128,7 @@ const SimpleTabs = (props) => {
     <div className={classes.root}>
       <Paper>
         <Tabs
+          id="back-to-top-anchor"
           value={value}
           onChange={handleChange}
           aria-label="simple tabs example"
@@ -136,25 +136,17 @@ const SimpleTabs = (props) => {
           textColor="primary"
           variant="fullWidth"
         >
-          {props.children.map((c, i) => toTabLabel(i, c))}
+          {props.children.map((child, index) => toTabLabel(child, index))}
         </Tabs>
-        <TabPanel value={value} index={0} dir={theme.direction}>
-          {props.children[0]}
-        </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
-          {props.children[1]}
-        </TabPanel>
-        <TabPanel value={value} index={2} dir={theme.direction}>
-          {React.cloneElement(props.children[2], { shouldDetect })}
-        </TabPanel>
+        {props.children.map((child, index, arr) => toTabPanel(child, index, value, arr))}
       </Paper>
       {fabs.map((fab, index) => (
         <Zoom
           key={fab.color}
-          in={value === index}
+          in={value === index + 1}
           timeout={transitionDuration}
           style={{
-            transitionDelay: `${value === index ? transitionDuration.exit : 0}ms`,
+            transitionDelay: `${value === index + 1 ? transitionDuration.exit : 0}ms`,
           }}
           unmountOnExit
         >
@@ -162,7 +154,7 @@ const SimpleTabs = (props) => {
             aria-label={fab.label}
             className={fab.className}
             color={fab.color}
-            onClick={handleToggleDetection}
+            onClick={fab.onClickHandler}
           >
             {fab.icon}
           </Fab>

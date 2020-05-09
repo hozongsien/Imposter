@@ -2,6 +2,7 @@
 import renderPredictions from './renderPredictions';
 
 const detectPose = (net, video, canvas, drawPrediction) => {
+  console.log('Predicting...');
   const poseDetectionFrame = async () => {
     let poses = [];
     const pose = await net.estimatePoses(video, {

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import { FixedSizeList } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
 import ImgCard from './ImgCard';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +26,7 @@ function renderRow(props) {
   const { index, style } = props;
 
   return (
-    <ListItem style={{ padding: '10px 0' }} key={index}>
+    <ListItem style={style} key={index}>
       <ImgCard title="Title" image="/pics/reptile.jpg" description="Descrition" alt="alt" />
     </ListItem>
   );
@@ -40,9 +39,6 @@ renderRow.propTypes = {
 
 const ListView = () => {
   const classes = useStyles();
-  const listButtonStyle = {
-    padding: '0',
-  };
 
   return (
     <div className={classes.root}>
