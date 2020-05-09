@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/Header';
 import SimpleTabs from './components/SimpleTabs';
 import SideDrawer from './components/SideDrawer';
-import ListView from './components/ListView';
+import ListViewTab from './components/ListViewTab';
 import PoseClassifierTab from './components/PoseClassifierTab';
 import LearnTab from './components/LearnTab';
 import './App.css';
@@ -14,7 +14,7 @@ function App() {
         <SideDrawer />
       </Header>
       <SimpleTabs>
-        <ListView />
+        <ListViewTab />
         <LearnTab />
         <PoseClassifierTab />
       </SimpleTabs>

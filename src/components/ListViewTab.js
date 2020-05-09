@@ -44,7 +44,7 @@ renderRow.propTypes = {
   style: PropTypes.object.isRequired,
 };
 
-const ListView = () => {
+const ListViewTab = () => {
   const classes = useStyles();
   const listRef = React.useRef();
   const [isScrollForward, setScrollForward] = React.useState(false);
@@ -88,4 +88,4 @@ const ListView = () => {
   );
 };
 
-export default ListView;
+export default ListViewTab;
