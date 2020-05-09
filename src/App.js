@@ -7,7 +7,7 @@ import PoseClassifierTab from './components/PoseClassifierTab';
 import LearnTab from './components/LearnTab';
 import './App.css';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <Header>
@@ -20,6 +20,6 @@ function App() {
       </SimpleTabs>
     </div>
   );
-}
+};
 
 export default App;

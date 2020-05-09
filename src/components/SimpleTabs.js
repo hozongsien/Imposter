@@ -15,45 +15,26 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { green } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 
-const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`action-tabpanel-${index}`}
-      aria-labelledby={`action-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={0}>{children}</Box>}
-    </Typography>
-  );
-};
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-TabPanel.defaultProps = {
-  children: PropTypes.node,
-};
-
-const a11yProps = (index) => {
-  return {
-    id: `action-tab-${index}`,
-    'aria-controls': `action-tabpanel-${index}`,
-  };
-};
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     width: '100%',
+    height: '100%',
     position: 'relative',
+  },
+  tabsContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  tabsPanel: {
+    height: '100%',
+    width: '100%',
+  },
+  tabsContent: {
+    height: '100%',
+    width: '100%',
   },
   fab: {
     position: 'absolute',
@@ -68,6 +49,45 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const a11yProps = (index) => {
+  return {
+    id: `action-tab-${index}`,
+    'aria-controls': `action-tabpanel-${index}`,
+  };
+};
+
+const TabPanel = (props) => {
+  const { children, value, index, ...other } = props;
+  const classes = useStyles();
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`action-tabpanel-${index}`}
+      aria-labelledby={`action-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box className={classes.tabsContent} p={0}>
+          {children}
+        </Box>
+      )}
+    </Typography>
+  );
+};
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+TabPanel.defaultProps = {
+  children: PropTypes.node,
+};
 
 const SimpleTabs = (props) => {
   const classes = useStyles();
@@ -118,7 +138,7 @@ const SimpleTabs = (props) => {
   const toTabPanel = (c, i, v, a) => {
     // Last item to be cloned to handle stopping of predictions
     return (
-      <TabPanel key={i} index={i} value={v} dir={theme.direction}>
+      <TabPanel className={classes.tabsPanel} key={i} index={i} value={v} dir={theme.direction}>
         {i === a.length - 1 ? React.cloneElement(c, { shouldDetect }) : c}
       </TabPanel>
     );
@@ -126,9 +146,8 @@ const SimpleTabs = (props) => {
 
   return (
     <div className={classes.root}>
-      <Paper>
+      <Paper className={classes.tabsContainer}>
         <Tabs
-          id="back-to-top-anchor"
           value={value}
           onChange={handleChange}
           aria-label="simple tabs example"
