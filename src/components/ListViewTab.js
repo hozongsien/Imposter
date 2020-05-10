@@ -121,7 +121,7 @@ const ListViewTab = () => {
           className={classes.list}
           ref={listRef}
           onScroll={handleScroll}
-          height={650}
+          height={700}
           itemCount={8}
           itemSize={400}
           width={350}
