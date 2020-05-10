@@ -83,7 +83,7 @@ const ListViewTab = () => {
         'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@nytonystark/video/6816145905821994246'
       ),
       fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
+        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@shinsama422/video/6808373753005739265'
       ),
       fetch(
         'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
