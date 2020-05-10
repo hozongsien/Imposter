@@ -96,7 +96,7 @@ TabPanel.defaultProps = {
 const SimpleTabs = (props) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(2);
   const [shouldDetect, setShouldDetect] = React.useState(true);
 
   const handleChange = (event, newValue) => {
@@ -108,7 +108,6 @@ const SimpleTabs = (props) => {
   };
 
   const handleClickToToggleDetection = () => {
-    // console.log(`Prediction: ${!shouldDetect}`);
     setShouldDetect(!shouldDetect);
   };
 

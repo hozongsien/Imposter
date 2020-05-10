@@ -1,9 +1,11 @@
+/* global requestAnimationFrame cancelAnimationFrame */
 import React, { useRef, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import * as posenet from '@tensorflow-models/posenet';
 import { makeStyles } from '@material-ui/core/styles';
 import loadMedia from './loadMedia';
 import loadModel from './loadModel';
-import detectPose from './detectPose';
+import renderPredictions from './renderPredictions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,32 +35,59 @@ const useStyles = makeStyles((theme) => ({
 
 const PoseClassifierTab = (props) => {
   const { shouldDetect } = props;
+  const [assetLoaded, setAssetLoaded] = useState({
+    model: undefined,
+    camera: undefined,
+  });
   const videoRef = useRef();
   const canvasRef = useRef();
+  const idRef = useRef();
+  const stopDetection = useRef();
   const classes = useStyles();
 
-  const predict = async (videoRef, canvasRef) => {
-    Promise.all([loadModel(posenet, 'medium'), loadMedia(videoRef, true)]).then((values) =>
-      detectPose(values[0], values[1], canvasRef.current, true, true)
-    );
+  const poseDetectionFrame = async () => {
+    stopDetection.current = false;
+
+    let poses = [];
+    const pose = await assetLoaded.model.estimatePoses(videoRef.current, {
+      flipHorizontal: true,
+      decodingMethod: 'single-person',
+    });
+    poses = poses.concat(pose);
+
+    renderPredictions(poses, videoRef.current, canvasRef.current);
+    if (stopDetection.current === false) {
+      const tempId = requestAnimationFrame(poseDetectionFrame);
+      idRef.current = tempId;
+    }
   };
 
   const startPredictions = () => {
-    console.log('Start Predictions');
-    predict(videoRef, canvasRef);
+    requestAnimationFrame(poseDetectionFrame);
   };
 
   const stopPredictions = () => {
-    console.log('Stop Predictions');
+    if (idRef.current) {
+      cancelAnimationFrame(idRef.current);
+      stopDetection.current = true;
+    }
   };
 
   useEffect(() => {
-    if (shouldDetect) {
-      const id = startPredictions();
-    } else {
-      stopPredictions();
+    if (!assetLoaded.model && !assetLoaded.camera && shouldDetect) {
+      Promise.all([loadModel(posenet, 'medium'), loadMedia(videoRef, true)]).then((assets) => {
+        setAssetLoaded({ model: assets[0], camera: assets[1] });
+      });
     }
-  }, [videoRef, canvasRef]);
+
+    if (shouldDetect && assetLoaded.model && assetLoaded.camera) {
+      startPredictions();
+    } else if (!shouldDetect && assetLoaded.model && assetLoaded.camera) {
+      stopPredictions();
+    } else {
+      console.log('idle....');
+    }
+  }, [assetLoaded, shouldDetect]);
 
   return (
     <div className={classes.root}>
@@ -74,6 +103,14 @@ const PoseClassifierTab = (props) => {
       <canvas className={classes.canvas} ref={canvasRef} />
     </div>
   );
+};
+
+PoseClassifierTab.propTypes = {
+  shouldDetect: PropTypes.bool,
+};
+
+PoseClassifierTab.defaultProps = {
+  shouldDetect: PropTypes.bool.true,
 };
 
 export default PoseClassifierTab;
