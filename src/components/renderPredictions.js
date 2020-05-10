@@ -85,11 +85,11 @@ const renderPredictions = (predictions, video, canvas) => {
 
   const ctx = canvas.getContext('2d');
 
-  ctx.clearRect(0, 0, video.width, video.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
   ctx.scale(-1, 1);
-  ctx.translate(-video.width, 0);
-  ctx.drawImage(video, 0, 0, video.width, video.height);
+  ctx.translate(-canvas.width, 0);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   ctx.restore();
 
   // For each pose (i.e. person) detected in an image, loop through the poses

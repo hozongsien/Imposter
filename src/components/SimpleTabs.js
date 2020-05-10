@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  tabLabel: {
+    boxShadow: '0 0 3px black',
   },
   tabsPanel: {
     height: '100%',
@@ -92,7 +96,7 @@ TabPanel.defaultProps = {
 const SimpleTabs = (props) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(2);
   const [shouldDetect, setShouldDetect] = React.useState(true);
 
   const handleChange = (event, newValue) => {
@@ -146,11 +150,12 @@ const SimpleTabs = (props) => {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.tabsContainer}>
+      <Paper square className={classes.tabsContainer}>
         <Tabs
+          className={classes.tabLabel}
           value={value}
           onChange={handleChange}
-          aria-label="simple tabs example"
+          aria-label="simple tabs"
           indicatorColor="primary"
           textColor="primary"
           variant="fullWidth"
