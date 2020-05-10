@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 
 const ImgCard = (props) => {
   const classes = useStyles();
-  const { title, image, description, alt } = props;
+  const { title, image, description, alt, link } = props;
 
   return (
     <Card className={classes.root}>
@@ -45,7 +45,7 @@ const ImgCard = (props) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" href={link}>
           View
         </Button>
         <Button size="small" color="primary">
@@ -61,6 +61,7 @@ ImgCard.propTypes = {
   image: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
 };
 
 export default ImgCard;

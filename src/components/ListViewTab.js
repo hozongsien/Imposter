@@ -42,6 +42,7 @@ const renderRow = (props) => {
         image={item.thumbnail_url}
         description={item.title}
         alt={item.title}
+        link={item.author_url}
       />
     </ListItem>
   );
@@ -100,7 +101,8 @@ const ListViewTab = () => {
       fetch(
         'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
       ),
-    ]);
+      // eslint-disable-next-line no-console
+    ]).catch(console.error);
 
     const jsons = responses.map((res) => res.json());
     const data = await Promise.all(jsons);
