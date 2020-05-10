@@ -6,6 +6,7 @@ import { Container, ListItem, Fab, Fade } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { FixedSizeList } from 'react-window';
 import ImgCard from './ImgCard';
+import Spinner from './Spinner';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     backgroundColor: theme.palette.background.paper,
     scrollBehavior: 'smooth',
+    display: 'flex',
   },
   scrollUp: {
     position: 'fixed',
@@ -35,16 +37,12 @@ const renderRow = (props) => {
   // const title = data[index].title;
   return (
     <ListItem style={style} key={index}>
-      {item ? (
-        <ImgCard
-          title={item.author_name}
-          image={item.thumbnail_url}
-          description={item.title}
-          alt={item.title}
-        />
-      ) : (
-        'loading'
-      )}
+      <ImgCard
+        title={item.author_name}
+        image={item.thumbnail_url}
+        description={item.title}
+        alt={item.title}
+      />
     </ListItem>
   );
 };
@@ -52,8 +50,7 @@ const renderRow = (props) => {
 renderRow.propTypes = {
   index: PropTypes.number.isRequired,
   style: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 const ListViewTab = () => {
@@ -86,10 +83,10 @@ const ListViewTab = () => {
         'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@shinsama422/video/6808373753005739265'
       ),
       fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
+        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@hotcheekylace/video/6824364109165907202'
       ),
       fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
+        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@yodelinghaley/video/6794132523589979397'
       ),
       fetch(
         'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
@@ -119,18 +116,23 @@ const ListViewTab = () => {
 
   return (
     <Container className={classes.root}>
-      <FixedSizeList
-        className={classes.list}
-        ref={listRef}
-        onScroll={handleScroll}
-        height={650}
-        itemCount={8}
-        itemSize={400}
-        width={350}
-        itemData={videosLoaded.items}
-      >
-        {renderRow}
-      </FixedSizeList>
+      {videosLoaded.isLoaded ? (
+        <FixedSizeList
+          className={classes.list}
+          ref={listRef}
+          onScroll={handleScroll}
+          height={650}
+          itemCount={8}
+          itemSize={400}
+          width={350}
+          itemData={videosLoaded.items}
+        >
+          {renderRow}
+        </FixedSizeList>
+      ) : (
+        <Spinner />
+      )}
+
       <Fade in={isScrollForward}>
         <Fab
           className={classes.scrollUp}
