@@ -22,7 +22,7 @@ const ImgCard = (props) => {
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia component="img" alt={alt} height="140" image={image} title={title} />
+        <CardMedia component="img" alt={alt} height="200" image={image} title={title} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {title}
