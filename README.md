@@ -1,11 +1,11 @@
-# Material Template
+# Imposter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a mobile web application that uses pose estimation (Tensorflow.js) to determine TikTok dance moves.
 
 ## Quick Start
 
 1. Clone repo <br />
-   `git clone https://github.com/mazerunnerzong-templates/react-template.git`
+   `git clone https://github.com/hozongsien/Imposter.git`
 
 2. Install dependencies <br />
    `npm install`
@@ -56,7 +56,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 `npm install @tensorflow/tfjs-core`
 
-### [Code Formatting](https://blog.echobind.com/integrating-prettier-eslint-airbnb-style-guide-in-vscode-47f07b5d7d6a)
+### Code Formatting - [Airbnb Style](https://blog.echobind.com/integrating-prettier-eslint-airbnb-style-guide-in-vscode-47f07b5d7d6a)
 
 `npm install -D eslint prettier`
 
