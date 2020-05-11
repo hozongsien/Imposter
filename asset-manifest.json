@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Imposter/static/css/main.4289beb9.chunk.css",
+    "main.js": "/Imposter/static/js/main.f0500b86.chunk.js",
+    "main.js.map": "/Imposter/static/js/main.f0500b86.chunk.js.map",
+    "runtime-main.js": "/Imposter/static/js/runtime-main.5d73dc0d.js",
+    "runtime-main.js.map": "/Imposter/static/js/runtime-main.5d73dc0d.js.map",
+    "static/js/2.6fe784d5.chunk.js": "/Imposter/static/js/2.6fe784d5.chunk.js",
+    "static/js/2.6fe784d5.chunk.js.map": "/Imposter/static/js/2.6fe784d5.chunk.js.map",
+    "index.html": "/Imposter/index.html",
+    "precache-manifest.18226e5f255f33f5e5b7b97968035b10.js": "/Imposter/precache-manifest.18226e5f255f33f5e5b7b97968035b10.js",
+    "service-worker.js": "/Imposter/service-worker.js",
+    "static/css/main.4289beb9.chunk.css.map": "/Imposter/static/css/main.4289beb9.chunk.css.map",
+    "static/js/2.6fe784d5.chunk.js.LICENSE.txt": "/Imposter/static/js/2.6fe784d5.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5d73dc0d.js",
+    "static/js/2.6fe784d5.chunk.js",
+    "static/css/main.4289beb9.chunk.css",
+    "static/js/main.f0500b86.chunk.js"
+  ]
+}
