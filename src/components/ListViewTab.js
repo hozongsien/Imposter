@@ -76,44 +76,32 @@ const ListViewTab = () => {
   };
 
   const fetchData = async () => {
-    const responses = await Promise.all([
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@nytonystark/video/6816145905821994246'
-      ),
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@shinsama422/video/6808373753005739265'
-      ),
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@hotcheekylace/video/6824364109165907202'
-      ),
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@yodelinghaley/video/6794132523589979397'
-      ),
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
-      ),
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
-      ),
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
-      ),
-      fetch(
-        'https://www.tiktok.com/oembed?url=https://www.tiktok.com/@scout2015/video/6718335390845095173'
-      ),
-      // eslint-disable-next-line no-console
-    ]).catch(console.error);
+    const baseEndPoint = 'https://www.tiktok.com/oembed?url=';
+    let urls = [
+      'https://www.tiktok.com/@shinsama422/video/6808373753005739265',
+      'https://www.tiktok.com/@hotcheekylace/video/6824364109165907202',
+      'https://www.tiktok.com/@yodelinghaley/video/6794132523589979397',
+      'https://www.tiktok.com/@vincentvianen/video/6818585484709629189',
+      'https://www.tiktok.com/@laurieelle/video/6739887224118136070',
+      'https://www.tiktok.com/@tessabrooks/video/6813203503457111301',
+      'https://www.tiktok.com/@nytonystark/video/6816145905821994246',
+      'https://www.tiktok.com/@scout2015/video/6718335390845095173',
+    ];
 
+    const fetchPromises = urls.map((link) => fetch(`${baseEndPoint}${link}`));
+    const responses = await Promise.all(fetchPromises);
     const jsons = responses.map((res) => res.json());
     const data = await Promise.all(jsons);
-    setVideoLoaded({
-      items: data,
-      isLoaded: true,
-    });
+    return data;
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData().then((data) =>
+      setVideoLoaded({
+        items: data,
+        isLoaded: true,
+      })
+    );
   }, []);
 
   return (
