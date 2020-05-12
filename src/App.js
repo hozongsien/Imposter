@@ -3,8 +3,7 @@ import Header from './components/Header';
 import SimpleTabs from './components/SimpleTabs';
 import SideDrawer from './components/SideDrawer';
 import ListViewTab from './components/ListViewTab';
-import PoseClassifierTab from './components/PoseClassifierTab';
-import LearnTab from './components/LearnTab';
+import PoseClassificationTab from './components/PoseClassificationTab';
 import './App.css';
 
 const App = () => {
@@ -15,8 +14,8 @@ const App = () => {
       </Header>
       <SimpleTabs>
         <ListViewTab />
-        <LearnTab />
-        <PoseClassifierTab />
+        <PoseClassificationTab src="/videos/renegade.mp4" />
+        <PoseClassificationTab isCamera />
       </SimpleTabs>
     </div>
   );

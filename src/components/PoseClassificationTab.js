@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PoseClassifierTab = (props) => {
-  const { shouldDetect } = props;
+  const { shouldDetect, isCamera, src } = props;
   const [assetLoaded, setAssetLoaded] = useState({
     model: undefined,
     media: undefined,
@@ -79,7 +79,7 @@ const PoseClassifierTab = (props) => {
 
   useEffect(() => {
     if (!assetLoaded.model && !assetLoaded.media && shouldDetect) {
-      Promise.all([loadModel(posenet, 'medium'), loadMedia(videoRef, true)]).then((assets) => {
+      Promise.all([loadModel(posenet, 'medium'), loadMedia(videoRef, isCamera)]).then((assets) => {
         setAssetLoaded({ model: assets[0], media: assets[1] });
       });
     }
@@ -97,6 +97,7 @@ const PoseClassifierTab = (props) => {
     <div className={classes.root}>
       <video
         className={classes.video}
+        src={isCamera ? '' : src}
         autoPlay
         playsInline
         muted
@@ -111,10 +112,14 @@ const PoseClassifierTab = (props) => {
 
 PoseClassifierTab.propTypes = {
   shouldDetect: PropTypes.bool,
+  isCamera: PropTypes.bool,
+  src: PropTypes.any,
 };
 
 PoseClassifierTab.defaultProps = {
   shouldDetect: PropTypes.bool.true,
+  isCamera: PropTypes.bool.false,
+  src: PropTypes.string,
 };
 
 export default PoseClassifierTab;
