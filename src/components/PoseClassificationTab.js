@@ -33,6 +33,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const startPredictions = (model, vidRef, canRef, stopDetectionRef, iRef) => {
+  const poseDetectionFrame = async () => {
+    // eslint-disable-next-line no-param-reassign
+    stopDetectionRef.current = false;
+
+    let poses = [];
+    try {
+      const pose = await model.estimatePoses(vidRef.current, {
+        flipHorizontal: true,
+        decodingMethod: 'single-person',
+      });
+      poses = poses.concat(pose);
+
+      renderPredictions(poses, vidRef.current, canRef.current);
+      if (stopDetectionRef.current === false) {
+        const tempId = requestAnimationFrame(poseDetectionFrame);
+        // eslint-disable-next-line no-param-reassign
+        iRef.current = tempId;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  requestAnimationFrame(poseDetectionFrame);
+};
+
+const stopPredictions = (stopDetectionRef, iRef) => {
+  if (iRef.current) {
+    cancelAnimationFrame(iRef.current);
+    // eslint-disable-next-line no-param-reassign
+    stopDetectionRef.current = true;
+  }
+};
+
 const PoseClassifierTab = (props) => {
   const { shouldDetect, isCamera, src } = props;
   const [assetLoaded, setAssetLoaded] = useState({
@@ -45,38 +80,6 @@ const PoseClassifierTab = (props) => {
   const stopDetection = useRef();
   const classes = useStyles();
 
-  const stopPredictions = () => {
-    if (idRef.current) {
-      cancelAnimationFrame(idRef.current);
-      stopDetection.current = true;
-    }
-  };
-
-  const poseDetectionFrame = async () => {
-    stopDetection.current = false;
-
-    let poses = [];
-    try {
-      const pose = await assetLoaded.model.estimatePoses(videoRef.current, {
-        flipHorizontal: true,
-        decodingMethod: 'single-person',
-      });
-      poses = poses.concat(pose);
-
-      renderPredictions(poses, videoRef.current, canvasRef.current);
-      if (stopDetection.current === false) {
-        const tempId = requestAnimationFrame(poseDetectionFrame);
-        idRef.current = tempId;
-      }
-    } catch (e) {
-      stopPredictions();
-    }
-  };
-
-  const startPredictions = () => {
-    requestAnimationFrame(poseDetectionFrame);
-  };
-
   useEffect(() => {
     if (!assetLoaded.model && !assetLoaded.media && shouldDetect) {
       Promise.all([loadModel(posenet, 'medium'), loadMedia(videoRef, isCamera)]).then((assets) => {
@@ -85,11 +88,11 @@ const PoseClassifierTab = (props) => {
     }
 
     if (shouldDetect && assetLoaded.model && assetLoaded.media) {
-      startPredictions();
+      startPredictions(assetLoaded.model, videoRef, canvasRef, stopDetection, idRef);
     }
 
     if (!shouldDetect && assetLoaded.model && assetLoaded.media) {
-      stopPredictions();
+      stopPredictions(stopDetection, idRef);
     }
   }, [assetLoaded, shouldDetect]);
 
