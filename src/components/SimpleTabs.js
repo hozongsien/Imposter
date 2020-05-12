@@ -96,11 +96,16 @@ TabPanel.defaultProps = {
 const SimpleTabs = (props) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(2);
-  const [shouldDetect, setShouldDetect] = React.useState(true);
+  const [value, setValue] = React.useState(0);
+  const [shouldDetect, setShouldDetect] = React.useState(false);
 
   const handleChange = (event, newValue) => {
+    setShouldDetect(false);
     setValue(newValue);
+
+    if (newValue === 1 || newValue === 2) {
+      setShouldDetect(true);
+    }
   };
 
   const handleClickToUpload = () => {
@@ -138,11 +143,10 @@ const SimpleTabs = (props) => {
     return <Tab key={i} label={label} {...a11yProps(i)} />;
   };
 
-  const toTabPanel = (c, i, v, a) => {
-    // Last item to be cloned to handle stopping of predictions
+  const toTabPanel = (c, i, v) => {
     return (
       <TabPanel className={classes.tabsPanel} key={i} index={i} value={v} dir={theme.direction}>
-        {i === a.length - 1 ? React.cloneElement(c, { shouldDetect }) : c}
+        {i === 0 ? c : React.cloneElement(c, { shouldDetect })}
       </TabPanel>
     );
   };
@@ -161,7 +165,7 @@ const SimpleTabs = (props) => {
         >
           {props.children.map((child, index) => toTabLabel(child, index))}
         </Tabs>
-        {props.children.map((child, index, arr) => toTabPanel(child, index, value, arr))}
+        {props.children.map((child, index) => toTabPanel(child, index, value))}
       </Paper>
       {fabs.map((fab, index) => (
         <Zoom

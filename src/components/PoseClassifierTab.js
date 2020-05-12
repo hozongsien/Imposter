@@ -37,34 +37,13 @@ const PoseClassifierTab = (props) => {
   const { shouldDetect } = props;
   const [assetLoaded, setAssetLoaded] = useState({
     model: undefined,
-    camera: undefined,
+    media: undefined,
   });
   const videoRef = useRef();
   const canvasRef = useRef();
   const idRef = useRef();
   const stopDetection = useRef();
   const classes = useStyles();
-
-  const poseDetectionFrame = async () => {
-    stopDetection.current = false;
-
-    let poses = [];
-    const pose = await assetLoaded.model.estimatePoses(videoRef.current, {
-      flipHorizontal: true,
-      decodingMethod: 'single-person',
-    });
-    poses = poses.concat(pose);
-
-    renderPredictions(poses, videoRef.current, canvasRef.current);
-    if (stopDetection.current === false) {
-      const tempId = requestAnimationFrame(poseDetectionFrame);
-      idRef.current = tempId;
-    }
-  };
-
-  const startPredictions = () => {
-    requestAnimationFrame(poseDetectionFrame);
-  };
 
   const stopPredictions = () => {
     if (idRef.current) {
@@ -73,19 +52,44 @@ const PoseClassifierTab = (props) => {
     }
   };
 
+  const poseDetectionFrame = async () => {
+    stopDetection.current = false;
+
+    let poses = [];
+    try {
+      const pose = await assetLoaded.model.estimatePoses(videoRef.current, {
+        flipHorizontal: true,
+        decodingMethod: 'single-person',
+      });
+      poses = poses.concat(pose);
+
+      renderPredictions(poses, videoRef.current, canvasRef.current);
+      if (stopDetection.current === false) {
+        const tempId = requestAnimationFrame(poseDetectionFrame);
+        idRef.current = tempId;
+      }
+    } catch (e) {
+      stopPredictions();
+    }
+  };
+
+  const startPredictions = () => {
+    requestAnimationFrame(poseDetectionFrame);
+  };
+
   useEffect(() => {
-    if (!assetLoaded.model && !assetLoaded.camera && shouldDetect) {
+    if (!assetLoaded.model && !assetLoaded.media && shouldDetect) {
       Promise.all([loadModel(posenet, 'medium'), loadMedia(videoRef, true)]).then((assets) => {
-        setAssetLoaded({ model: assets[0], camera: assets[1] });
+        setAssetLoaded({ model: assets[0], media: assets[1] });
       });
     }
 
-    if (shouldDetect && assetLoaded.model && assetLoaded.camera) {
+    if (shouldDetect && assetLoaded.model && assetLoaded.media) {
       startPredictions();
-    } else if (!shouldDetect && assetLoaded.model && assetLoaded.camera) {
+    }
+
+    if (!shouldDetect && assetLoaded.model && assetLoaded.media) {
       stopPredictions();
-    } else {
-      console.log('idle....');
     }
   }, [assetLoaded, shouldDetect]);
 
