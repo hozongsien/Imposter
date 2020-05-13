@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -32,6 +34,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function ListItemLink(props) {
+  const { classes, icon, primary, to } = props;
+
+  const CustomLink = React.useMemo(
+    () => React.forwardRef((linkProps, ref) => <Link ref={ref} to={to} {...linkProps} />),
+    [to]
+  );
+
+  return (
+    <ListItem button className={classes} component={CustomLink}>
+      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={primary} />
+    </ListItem>
+  );
+}
+
+ListItemLink.propTypes = {
+  classes: PropTypes.string,
+  icon: PropTypes.element,
+  primary: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
+};
+
+ListItemLink.defaultProps = {
+  classes: undefined,
+  icon: undefined,
+};
+
 const SideDrawer = () => {
   const classes = useStyles();
   const [state, setState] = React.useState({
@@ -54,42 +84,13 @@ const SideDrawer = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List className={classes.subList}>
-        <ListItem className={classes.loginButton} button>
-          <ListItemText primary="Log in" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <HistoryIcon />
-          </ListItemIcon>
-          <ListItemText primary="History" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <StarsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Starred" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <HelpIcon />
-          </ListItemIcon>
-          <ListItemText primary="Help" />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button>
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Settings" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <InfoIcon />
-          </ListItemIcon>
-          <ListItemText primary="About" />
-        </ListItem>
+        <ListItemLink classes={classes.loginButton} primary="Log in" to="/login" />
+        <ListItemLink icon={<HistoryIcon />} primary="History" to="/history" />
+        <ListItemLink icon={<StarsIcon />} primary="Starred" to="/starred" />
+        <ListItemLink icon={<HelpIcon />} primary="Help" to="/help" />
+        <Divider />
+        <ListItemLink icon={<SettingsIcon />} primary="Settings" to="/settings" />
+        <ListItemLink icon={<InfoIcon />} primary="About" to="/about" />
       </List>
     </div>
   );
