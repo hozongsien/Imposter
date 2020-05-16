@@ -1,64 +1,8 @@
-/* eslint-disable no-underscore-dangle */
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
-const { buildSchema } = require('graphql');
 const mongoose = require('mongoose');
-
-const Video = require('./models/videos');
-
-const schema = buildSchema(`
-  type Video {
-    _id: ID!
-    title: String!
-    authorName: String!
-    url: String!
-  }
-
-  input VideoInput {
-    title: String!
-    authorName: String!
-    url: String!
-  }
-
-  type RootQuery {
-      videos: [Video!]!
-  }
-  type RootMutation {
-      createVideo(videoInput: VideoInput): Video
-  }
-  schema {
-      query: RootQuery
-      mutation: RootMutation
-  }
-`);
-
-const rootValue = {
-  videos: () => {
-    const getDoc = async () => {
-      const videos = await Video.find();
-      return videos.map((video) => {
-        return { ...video._doc };
-      });
-    };
-
-    return getDoc();
-  },
-  createVideo: (args) => {
-    const video = new Video({
-      title: args.videoInput.title,
-      authorName: args.videoInput.authorName,
-      url: args.videoInput.url,
-    });
-
-    const getDoc = async (vid) => {
-      const result = await vid.save();
-      const doc = await { ...result._doc };
-      return doc;
-    };
-
-    return getDoc(video);
-  },
-};
+const schema = require('./graphql/schema/index');
+const rootValue = require('./graphql/resolvers/index');
 
 const server = express();
 server.use(

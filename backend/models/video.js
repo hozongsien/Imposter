@@ -15,6 +15,10 @@ const videoSchema = new Schema({
     type: String,
     required: true,
   },
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 module.exports = mongoose.model('Video', videoSchema);
