@@ -1,6 +1,12 @@
 const { buildSchema } = require('graphql');
 
 const schema = buildSchema(`
+  type Favourite {
+    _id: ID!
+    video: Video!
+    user: User!
+  }
+
   type Video {
     _id: ID!
     title: String!
@@ -29,10 +35,13 @@ const schema = buildSchema(`
 
   type RootQuery {
       videos: [Video!]!
+      favourites: [Favourite!]!
   }
   type RootMutation {
       createVideo(videoInput: VideoInput): Video
       createUser(userInput: UserInput): User
+      favouriteVideo(videoId: ID!): Favourite!
+      unFavouriteVideo(favouriteId: ID!): Video!
   }
   schema {
       query: RootQuery
