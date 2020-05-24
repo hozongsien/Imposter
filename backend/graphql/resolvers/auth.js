@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 
 const authResolver = {
@@ -17,6 +18,22 @@ const authResolver = {
     const result = await newUser.save();
 
     return { ...result._doc, password: null };
+  },
+  login: async (args) => {
+    const user = await User.findOne({ email: args.userInput.email });
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
+
+    const isPwdCorrect = await bcrypt.compare(args.userInput.password, user.password);
+    if (!isPwdCorrect) {
+      throw new Error('Invalid credentials');
+    }
+    const signedToken = jwt.sign({ userId: user.id, email: user.email }, 'notasupersecretkey', {
+      expiresIn: '1h',
+    });
+
+    return { userId: user.id, token: signedToken, tokenExpiration: 1 };
   },
 };
 

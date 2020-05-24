@@ -22,6 +22,12 @@ const schema = buildSchema(`
     addedVideos: [Video!]
   }
 
+  type AuthData {
+    userId: ID!
+    token: String!
+    tokenExpiration: Int!
+  }
+
   input VideoInput {
     title: String!
     authorName: String!
@@ -36,6 +42,7 @@ const schema = buildSchema(`
   type RootQuery {
       videos: [Video!]!
       favourites: [Favourite!]!
+      login(userInput: UserInput!): AuthData!
   }
   type RootMutation {
       createVideo(videoInput: VideoInput): Video

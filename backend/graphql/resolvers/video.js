@@ -12,18 +12,22 @@ const videoResolver = {
     const vids = await Video.find();
     return vids.map((vid) => transformVideo(vid));
   },
-  createVideo: async (args) => {
+  createVideo: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated');
+    }
+
     const video = new Video({
       title: args.videoInput.title,
       authorName: args.videoInput.authorName,
       url: args.videoInput.url,
-      creator: '5ebfdfa4cffe77304116483b',
+      creator: req.userId,
     });
 
     const videoResult = await video.save();
     const doc = await transformVideo(videoResult);
 
-    const user = await User.findById('5ebfdfa4cffe77304116483b');
+    const user = await User.findById(req.userId);
     if (!user) {
       throw new Error('User not found');
     }

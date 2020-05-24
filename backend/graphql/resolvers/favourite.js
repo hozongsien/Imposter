@@ -12,21 +12,33 @@ const transformFavourite = (fav) => {
 };
 
 const favouriteResolver = {
-  favourites: async () => {
+  favourites: async (arg, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated');
+    }
+
     const favs = await Favourite.find();
     return favs.map((fav) => transformFavourite(fav));
   },
-  favouriteVideo: async (args) => {
+  favouriteVideo: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated');
+    }
+
     const fetchedVideo = await Video.findOne({ _id: args.videoId });
     const fav = new Favourite({
       video: fetchedVideo,
-      user: '5ebfdfa4cffe77304116483b',
+      user: req.userId,
     });
 
     const result = await fav.save();
     return transformFavourite(result);
   },
-  unFavouriteVideo: async (args) => {
+  unFavouriteVideo: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated');
+    }
+
     const fav = await Favourite.findById(args.favouriteId).populate('video');
     const video = { ...fav.video._doc, creator: getUser.bind(this, fav.video._doc.creator) };
     await Favourite.deleteOne({ _id: args.favouriteId });
