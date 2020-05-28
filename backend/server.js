@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 const schema = require('./graphql/schema/index');
 const rootValue = require('./graphql/resolvers/index');
 const isAuthenticated = require('./middleware/is-auth');
+const allowCors = require('./middleware/allow-cors');
 
 const server = express();
+
+server.use(allowCors);
 
 server.use(isAuthenticated);
 
