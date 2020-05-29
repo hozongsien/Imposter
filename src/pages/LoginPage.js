@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
@@ -47,11 +47,12 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = () => {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     email: '',
     password: '',
     showPassword: false,
   });
+  const [isSignIn, setSignIn] = useState(true);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -65,10 +66,14 @@ const LoginPage = () => {
     event.preventDefault();
   };
 
+  const handleToggleSignInAccount = () => {
+    setSignIn(!isSignIn);
+  };
+
   return (
     <Container className={classes.root}>
       <Typography variant="h5" component="h2">
-        <Box className={classes.title}>Sign in</Box>
+        <Box className={classes.title}>{isSignIn ? 'Sign in' : 'Create an account'}</Box>
       </Typography>
       <Box className={clsx(classes.formBox, classes.margin)}>
         <Box className={classes.inputBox}>
@@ -105,8 +110,13 @@ const LoginPage = () => {
           </FormControl>
         </Box>
         <Box className={classes.buttonBox}>
-          <Button variant="text" color="primary" className={classes.button}>
-            Create account
+          <Button
+            variant="text"
+            color="primary"
+            className={classes.button}
+            onClick={handleToggleSignInAccount}
+          >
+            {isSignIn ? 'Create account' : 'Sign in'}
           </Button>
           <Button type="submit" variant="contained" color="primary" className={classes.button}>
             Next
