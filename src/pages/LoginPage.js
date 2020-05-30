@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
+/* global fetch */
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -54,7 +55,7 @@ const LoginPage = () => {
     showPassword: false,
   });
 
-  const [isSignIn, setSignIn] = useState(false);
+  const [isSignIn, setSignIn] = useState(true);
 
   const [errors, setErrors] = useState({
     signIn: {
@@ -82,15 +83,51 @@ const LoginPage = () => {
     setSignIn(!isSignIn);
   };
 
+  const queryGraphql = async (requestBody) => {
+    const baseEndPoint = 'http://localhost:5000/graphql';
+
+    const response = await fetch(baseEndPoint, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+    return data;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const createUserRequestBody = {
+      query: `
+        mutation {
+          createUser(userInput: {email: "${values.email}", password: "${values.password}"}) {
+            _id
+            email
+          }
+        }`,
+    };
+
+    const loginRequestBody = {
+      query: `
+        query {
+          login(userInput: {email: "${values.email}", password: "${values.password}"}) {
+            userId
+            token
+            tokenExpiration
+          }
+        }`,
+    };
+
     if (isSignIn) {
-      console.log('sign in!');
-      console.log(values.email, values.password);
+      const loginData = queryGraphql(loginRequestBody);
+      loginData.then((d) => console.log(d));
     } else {
-      console.log('create account!');
-      console.log(values.email, values.password);
+      const createUserData = queryGraphql(createUserRequestBody);
+      createUserData.then((d) => console.log(d));
     }
   };
 
