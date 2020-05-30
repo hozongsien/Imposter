@@ -7,6 +7,7 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
+  FormHelperText,
   Button,
   Typography,
 } from '@material-ui/core';
@@ -52,7 +53,18 @@ const LoginPage = () => {
     password: '',
     showPassword: false,
   });
-  const [isSignIn, setSignIn] = useState(true);
+
+  const [isSignIn, setSignIn] = useState(false);
+
+  const [errors, setErrors] = useState({
+    signIn: {
+      credentials: false,
+    },
+    createAccount: {
+      email: false,
+      password: false,
+    },
+  });
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -66,8 +78,20 @@ const LoginPage = () => {
     event.preventDefault();
   };
 
-  const handleToggleSignInAccount = () => {
+  const handleToggleSignIn = () => {
     setSignIn(!isSignIn);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (isSignIn) {
+      console.log('sign in!');
+      console.log(values.email, values.password);
+    } else {
+      console.log('create account!');
+      console.log(values.email, values.password);
+    }
   };
 
   return (
@@ -75,18 +99,35 @@ const LoginPage = () => {
       <Typography variant="h5" component="h2">
         <Box className={classes.title}>{isSignIn ? 'Sign in' : 'Create an account'}</Box>
       </Typography>
-      <Box className={clsx(classes.formBox, classes.margin)}>
+      <form
+        className={clsx(classes.formBox, classes.margin)}
+        autoComplete="on"
+        onSubmit={handleSubmit}
+      >
         <Box className={classes.inputBox}>
-          <FormControl className={classes.input} fullWidth variant="outlined">
+          <FormControl
+            className={classes.input}
+            fullWidth
+            variant="outlined"
+            required
+            error={errors.createAccount.email || errors.signIn.credentials}
+          >
             <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
             <OutlinedInput
               id="outlined-adornment-email"
-              type="text"
+              type="email"
+              value={values.email}
               onChange={handleChange('email')}
               labelWidth={70}
             />
           </FormControl>
-          <FormControl className={classes.input} fullWidth variant="outlined">
+          <FormControl
+            className={classes.input}
+            fullWidth
+            variant="outlined"
+            required
+            error={errors.createAccount.password || errors.signIn.credentials}
+          >
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
@@ -107,6 +148,7 @@ const LoginPage = () => {
               }
               labelWidth={70}
             />
+            {errors.signIn.credentials ? <FormHelperText>Invalid credentials</FormHelperText> : ''}
           </FormControl>
         </Box>
         <Box className={classes.buttonBox}>
@@ -114,15 +156,15 @@ const LoginPage = () => {
             variant="text"
             color="primary"
             className={classes.button}
-            onClick={handleToggleSignInAccount}
+            onClick={handleToggleSignIn}
           >
-            {isSignIn ? 'Create account' : 'Sign in'}
+            {isSignIn ? 'Create account' : 'Sign in instead'}
           </Button>
-          <Button type="submit" variant="contained" color="primary" className={classes.button}>
+          <Button type="submit" className={classes.button} variant="contained" color="primary">
             Next
           </Button>
         </Box>
-      </Box>
+      </form>
     </Container>
   );
 };
