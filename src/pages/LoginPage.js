@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-/* global fetch */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Container,
@@ -17,8 +16,10 @@ import IconButton from '@material-ui/core/IconButton';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import queryGraphql from '../components/queryGraphql';
+import AuthenticationContext from '../context/AuthenticationContext';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -67,6 +68,8 @@ const LoginPage = () => {
     },
   });
 
+  const authContext = useContext(AuthenticationContext);
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -83,51 +86,37 @@ const LoginPage = () => {
     setSignIn(!isSignIn);
   };
 
-  const queryGraphql = async (requestBody) => {
-    const baseEndPoint = 'http://localhost:5000/graphql';
-
-    const response = await fetch(baseEndPoint, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const data = await response.json();
-    return data;
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const createUserRequestBody = {
-      query: `
-        mutation {
-          createUser(userInput: {email: "${values.email}", password: "${values.password}"}) {
-            _id
-            email
-          }
-        }`,
-    };
+    const createUserQuery = `
+      mutation {
+        createUser(userInput: {email: "${values.email}", password: "${values.password}"}) {
+          _id
+          email
+        }
+      }`;
 
-    const loginRequestBody = {
-      query: `
-        query {
-          login(userInput: {email: "${values.email}", password: "${values.password}"}) {
-            userId
-            token
-            tokenExpiration
-          }
-        }`,
-    };
+    const loginQuery = `
+      query {
+        login(userInput: {email: "${values.email}", password: "${values.password}"}) {
+          userId
+          token
+          tokenExpiration
+        }
+      }`;
 
     if (isSignIn) {
-      const loginData = queryGraphql(loginRequestBody);
-      loginData.then((d) => console.log(d));
+      const loginData = queryGraphql(loginQuery);
+      loginData.then((fetchedData) => {
+        authContext.login(
+          fetchedData.data.login.token,
+          fetchedData.data.login.tokenExpiration,
+          fetchedData.data.login.userId
+        );
+      });
     } else {
-      const createUserData = queryGraphql(createUserRequestBody);
-      createUserData.then((d) => console.log(d));
+      const createUserData = queryGraphql(createUserQuery);
     }
   };
 
