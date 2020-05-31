@@ -60,21 +60,21 @@ const drawKeypoints = (keypoints, minConfidence, ctx, scale = 1) => {
  * in an image, the bounding box will begin at the nose and extend to one of
  * ankles
  */
-const drawBoundingBox = (keypoints, ctx) => {
-  const boundingBoxColor = 'red';
+// const drawBoundingBox = (keypoints, ctx) => {
+//   const boundingBoxColor = 'red';
 
-  const boundingBox = posenet.getBoundingBox(keypoints);
+//   const boundingBox = posenet.getBoundingBox(keypoints);
 
-  ctx.strokeRect(
-    boundingBox.minX,
-    boundingBox.minY,
-    boundingBox.maxX - boundingBox.minX,
-    boundingBox.maxY - boundingBox.minY
-  );
+//   ctx.strokeRect(
+//     boundingBox.minX,
+//     boundingBox.minY,
+//     boundingBox.maxX - boundingBox.minX,
+//     boundingBox.maxY - boundingBox.minY
+//   );
 
-  ctx.strokeStyle = boundingBoxColor;
-  ctx.stroke();
-};
+//   ctx.strokeStyle = boundingBoxColor;
+//   ctx.stroke();
+// };
 
 const renderPredictions = (predictions, video, canvas) => {
   canvas.width = video.width;

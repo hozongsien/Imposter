@@ -14,6 +14,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { green } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
+import PredictionContext from '../context/PredictionContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,15 +98,34 @@ const SimpleTabs = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
-  const [shouldDetect, setShouldDetect] = React.useState(false);
+  const [shouldDetect, setShouldDetect] = React.useState({
+    videoTab: false,
+    cameraTab: false,
+  });
+
+  const configDetection = (vid, cam) => {
+    setShouldDetect({
+      videoTab: vid,
+      cameraTab: cam,
+    });
+  };
 
   const handleChange = (event, newValue) => {
-    setShouldDetect(false);
-    setValue(newValue);
-
-    if (newValue === 1 || newValue === 2) {
-      setShouldDetect(true);
+    if (newValue === 1) {
+      setShouldDetect({
+        videoTab: true,
+        cameraTab: false,
+      });
     }
+
+    if (newValue === 2) {
+      setShouldDetect({
+        videoTab: false,
+        cameraTab: true,
+      });
+    }
+
+    setValue(newValue);
   };
 
   const handleClickToUpload = () => {
@@ -113,7 +133,10 @@ const SimpleTabs = (props) => {
   };
 
   const handleClickToToggleDetection = () => {
-    setShouldDetect(!shouldDetect);
+    setShouldDetect({
+      videoTab: shouldDetect.videoTab,
+      cameraTab: !shouldDetect.cameraTab,
+    });
   };
 
   const transitionDuration = {
@@ -132,7 +155,7 @@ const SimpleTabs = (props) => {
     {
       color: 'primary',
       className: classes.fab,
-      icon: shouldDetect ? <PauseIcon /> : <PlayArrowIcon />,
+      icon: shouldDetect.cameraTab ? <PauseIcon /> : <PlayArrowIcon />,
       label: 'Pause/Play',
       onClickHandler: handleClickToToggleDetection,
     },
@@ -146,47 +169,49 @@ const SimpleTabs = (props) => {
   const toTabPanel = (c, i, v) => {
     return (
       <TabPanel className={classes.tabsPanel} key={i} index={i} value={v} dir={theme.direction}>
-        {i === 0 ? c : React.cloneElement(c, { shouldDetect })}
+        {c}
       </TabPanel>
     );
   };
 
   return (
     <div className={classes.root}>
-      <Paper square className={classes.tabsContainer}>
-        <Tabs
-          className={classes.tabLabel}
-          value={value}
-          onChange={handleChange}
-          aria-label="simple tabs"
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-        >
-          {props.children.map((child, index) => toTabLabel(child, index))}
-        </Tabs>
-        {props.children.map((child, index) => toTabPanel(child, index, value))}
-      </Paper>
-      {fabs.map((fab, index) => (
-        <Zoom
-          key={fab.color}
-          in={value === index + 1}
-          timeout={transitionDuration}
-          style={{
-            transitionDelay: `${value === index + 1 ? transitionDuration.exit : 0}ms`,
-          }}
-          unmountOnExit
-        >
-          <Fab
-            aria-label={fab.label}
-            className={fab.className}
-            color={fab.color}
-            onClick={fab.onClickHandler}
+      <PredictionContext.Provider value={{ shouldDetect, configDetection }}>
+        <Paper square className={classes.tabsContainer}>
+          <Tabs
+            className={classes.tabLabel}
+            value={value}
+            onChange={handleChange}
+            aria-label="simple tabs"
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
           >
-            {fab.icon}
-          </Fab>
-        </Zoom>
-      ))}
+            {props.children.map((child, index) => toTabLabel(child, index))}
+          </Tabs>
+          {props.children.map((child, index) => toTabPanel(child, index, value))}
+        </Paper>
+        {fabs.map((fab, index) => (
+          <Zoom
+            key={fab.color}
+            in={value === index + 1}
+            timeout={transitionDuration}
+            style={{
+              transitionDelay: `${value === index + 1 ? transitionDuration.exit : 0}ms`,
+            }}
+            unmountOnExit
+          >
+            <Fab
+              aria-label={fab.label}
+              className={fab.className}
+              color={fab.color}
+              onClick={fab.onClickHandler}
+            >
+              {fab.icon}
+            </Fab>
+          </Zoom>
+        ))}
+      </PredictionContext.Provider>
     </div>
   );
 };
