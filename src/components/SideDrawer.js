@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -16,6 +16,7 @@ import StarsIcon from '@material-ui/icons/Stars';
 import HelpIcon from '@material-ui/icons/Help';
 import SettingsIcon from '@material-ui/icons/Settings';
 import InfoIcon from '@material-ui/icons/Info';
+import AuthenticationContext from '../context/AuthenticationContext';
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -44,7 +45,7 @@ function ListItemLink(props) {
 
   return (
     <ListItem button className={classes} component={CustomLink}>
-      <ListItemIcon>{icon}</ListItemIcon>
+      {icon && <ListItemIcon>{icon}</ListItemIcon>}
       <ListItemText primary={primary} />
     </ListItem>
   );
@@ -65,28 +66,41 @@ ListItemLink.defaultProps = {
 const SideDrawer = () => {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    left: false,
+    isOpen: false,
   });
 
-  const toggleDrawer = (anchor, open) => (event) => {
+  const authContext = useContext(AuthenticationContext);
+
+  const toggleDrawer = (open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setState({ isOpen: open });
   };
 
-  const list = (anchor) => (
+  const list = () => (
     <div
       className={clsx(classes.list)}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
     >
       <List className={classes.subList}>
-        <ListItemLink classes={classes.loginButton} primary="Log in" to="/login" />
-        <ListItemLink icon={<HistoryIcon />} primary="History" to="/history" />
-        <ListItemLink icon={<StarsIcon />} primary="Starred" to="/starred" />
+        {authContext.token ? (
+          <ListItemLink classes={classes.loginButton} icon={null} primary={authContext.userId} />
+        ) : (
+          <ListItemLink
+            classes={classes.loginButton}
+            primary="Log in / Create account"
+            to="/login"
+          />
+        )}
+
+        {authContext.token && (
+          <ListItemLink icon={<HistoryIcon />} primary="History" to="/history" />
+        )}
+        {authContext.token && <ListItemLink icon={<StarsIcon />} primary="Starred" to="/starred" />}
         <ListItemLink icon={<HelpIcon />} primary="Help" to="/help" />
         <Divider />
         <ListItemLink icon={<SettingsIcon />} primary="Settings" to="/settings" />
@@ -97,27 +111,25 @@ const SideDrawer = () => {
 
   return (
     <div>
-      {['left'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer(anchor, true)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
+      <React.Fragment key="left">
+        <IconButton
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+          onClick={toggleDrawer(true)}
+        >
+          <MenuIcon />
+        </IconButton>
+        <SwipeableDrawer
+          anchor="left"
+          open={state.isOpen}
+          onClose={toggleDrawer(false)}
+          onOpen={toggleDrawer(true)}
+        >
+          {list()}
+        </SwipeableDrawer>
+      </React.Fragment>
     </div>
   );
 };
