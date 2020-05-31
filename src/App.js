@@ -14,23 +14,24 @@ import './App.css';
 
 const App = () => {
   const [state, setState] = useState({
-    token: null,
     userId: null,
+    email: null,
+    token: null,
   });
 
-  const login = (token, tokenExpiration, userId) => {
-    setState({ token, userId });
+  const login = (userId, email, token, tokenExpiration) => {
+    setState({ userId, email, token });
   };
 
   const logout = () => {
-    setState({ token: null, userId: null });
+    setState({ userId: null, email: null, token: null });
   };
 
   return (
     <Router>
       <div className="App">
         <AuthenticationContext.Provider
-          value={{ token: state.token, userId: state.userId, login, logout }}
+          value={{ userId: state.userId, email: state.email, token: state.token, login, logout }}
         >
           <Header>
             <SideDrawer />

@@ -33,7 +33,7 @@ const authResolver = {
       expiresIn: '1h',
     });
 
-    return { userId: user.id, token: signedToken, tokenExpiration: 1 };
+    return { userId: user.id, email: user.email, token: signedToken, tokenExpiration: 1 };
   },
 };
 
