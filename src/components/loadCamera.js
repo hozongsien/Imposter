@@ -25,23 +25,4 @@ const loadCamera = async (videoRef) => {
   });
 };
 
-const loadVideo = async (videoRef) => {
-  return new Promise((resolve) => {
-    videoRef.current.onloadeddata = () => {
-      resolve(videoRef.current);
-    };
-  });
-};
-
-const loadMedia = async (videoRef, isCamera) => {
-  let media;
-  if (isCamera) {
-    media = await loadCamera(videoRef);
-    return media;
-  }
-
-  media = await loadVideo(videoRef);
-  return media;
-};
-
-export default loadMedia;
+export default loadCamera;
