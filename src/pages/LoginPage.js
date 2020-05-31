@@ -10,12 +10,11 @@ import {
   FormHelperText,
   Button,
   Typography,
+  IconButton,
+  FormControl,
 } from '@material-ui/core';
 import clsx from 'clsx';
-import IconButton from '@material-ui/core/IconButton';
-import FormControl from '@material-ui/core/FormControl';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import queryGraphql from '../components/queryGraphql';
 import AuthenticationContext from '../context/AuthenticationContext';
 
@@ -101,6 +100,7 @@ const LoginPage = () => {
       query {
         login(userInput: {email: "${values.email}", password: "${values.password}"}) {
           userId
+          email
           token
           tokenExpiration
         }
@@ -110,13 +110,17 @@ const LoginPage = () => {
       const loginData = queryGraphql(loginQuery);
       loginData.then((fetchedData) => {
         authContext.login(
+          fetchedData.data.login.userId,
+          fetchedData.data.login.email,
           fetchedData.data.login.token,
-          fetchedData.data.login.tokenExpiration,
-          fetchedData.data.login.userId
+          fetchedData.data.login.tokenExpiration
         );
       });
     } else {
       const createUserData = queryGraphql(createUserQuery);
+      createUserData.then((fetchedData) => {
+        console.log(fetchedData.data);
+      });
     }
   };
 

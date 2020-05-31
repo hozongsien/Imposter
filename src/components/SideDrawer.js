@@ -88,7 +88,7 @@ const SideDrawer = () => {
     >
       <List className={classes.subList}>
         {authContext.token ? (
-          <ListItemLink classes={classes.loginButton} icon={null} primary={authContext.userId} />
+          <ListItemLink classes={classes.loginButton} icon={null} primary={authContext.email} />
         ) : (
           <ListItemLink
             classes={classes.loginButton}
