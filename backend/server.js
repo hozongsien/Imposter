@@ -21,6 +21,9 @@ server.use(
   })
 );
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+
 mongoose
   .connect(
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-i55mj.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
