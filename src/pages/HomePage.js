@@ -8,7 +8,7 @@ const Home = () => {
     <SimpleTabs>
       <ListViewTab />
       <PoseClassificationTab src="/videos/renegade.mp4" />
-      <PoseClassificationTab isCamera />
+      <PoseClassificationTab />
     </SimpleTabs>
   );
 };
