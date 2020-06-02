@@ -71,7 +71,7 @@ const stopPredictions = (stopDetectionRef, iRef) => {
 };
 
 const PoseClassifierTab = (props) => {
-  const { isCamera, src } = props;
+  const { src } = props;
   const [assetLoaded, setAssetLoaded] = useState({
     model: null,
     media: null,
@@ -84,26 +84,38 @@ const PoseClassifierTab = (props) => {
 
   const predContext = useContext(PredictionContext);
 
-  useEffect(() => {
+  const mountMedia = async () => {
     let loadMedia;
-    if (isCamera) {
-      loadMedia = loadCamera;
-    } else {
+    if (src) {
       loadMedia = loadVideo;
+    } else {
+      loadMedia = loadCamera;
     }
 
-    // initial load
-    if (
-      !assetLoaded.model &&
-      !assetLoaded.media &&
-      (predContext.shouldDetect.videoTab || predContext.shouldDetect.cameraTab)
-    ) {
-      Promise.all([loadModel(posenet, 'medium'), loadMedia(mediaRef)]).then((assets) => {
-        setAssetLoaded({ model: assets[0], media: assets[1] });
+    const [model, media] = await Promise.all([loadModel(posenet, 'medium'), loadMedia(mediaRef)]);
+    setAssetLoaded({ model, media });
+  };
+
+  const unmountMedia = () => {
+    if (!src) {
+      mediaRef.current.srcObject.getTracks().forEach((track) => {
+        track.stop();
       });
     }
+  };
 
-    // citeria for starting predicttion
+  // mount & unmount
+  useEffect(() => {
+    mountMedia();
+
+    return () => {
+      stopPredictions(stopDetection, idRef);
+      unmountMedia();
+    };
+  }, []);
+
+  // toggle detection
+  useEffect(() => {
     if (
       assetLoaded.model &&
       assetLoaded.media &&
@@ -112,7 +124,6 @@ const PoseClassifierTab = (props) => {
       startPredictions(assetLoaded.model, mediaRef, canvasRef, stopDetection, idRef);
     }
 
-    // criteria for endging prediction
     if (
       assetLoaded.model &&
       assetLoaded.media &&
@@ -120,19 +131,13 @@ const PoseClassifierTab = (props) => {
     ) {
       stopPredictions(stopDetection, idRef);
     }
-
-    return () => {
-      if (assetLoaded.model && assetLoaded.media) {
-        stopPredictions(stopDetection, idRef);
-      }
-    };
-  }, [isCamera, assetLoaded, predContext.shouldDetect]);
+  }, [assetLoaded, predContext.shouldDetect]);
 
   return (
     <div className={classes.root}>
       <video
         className={classes.video}
-        src={isCamera ? '' : src}
+        src={src}
         autoPlay
         playsInline
         muted
@@ -146,13 +151,11 @@ const PoseClassifierTab = (props) => {
 };
 
 PoseClassifierTab.propTypes = {
-  isCamera: PropTypes.bool,
-  src: PropTypes.any,
+  src: PropTypes.string,
 };
 
 PoseClassifierTab.defaultProps = {
-  isCamera: PropTypes.bool.false,
-  src: PropTypes.string,
+  src: null,
 };
 
 export default PoseClassifierTab;
